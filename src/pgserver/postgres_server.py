@@ -153,9 +153,12 @@ class PostgresServer:
                     ensure_prefix_permissions(socket_dir)
                     socket_dir.chmod(0o777)
 
+                host = "127.0.0.1"
+                port = find_suitable_port(host)
+
                 pg_ctl_args = ['-w',  # wait for server to start
-                        '-o', '-h ""',  # no listening on any IP addresses (forwarded to postgres exec) see man postgres for -hj
-                        '-o',  f'-k {socket_dir}', # socket option (forwarded to postgres exec) see man postgres for -k
+                        '-o', f'-h "{host}"',
+                        '-o', f'-p {port}',
                         '-l', str(self.log), # log location: set to pgdata dir also
                         'start' # action
                 ]
